@@ -1,0 +1,14 @@
+{
+    "sistema_operativo": "Windows 11 (10.0.26200)",
+    "arquitectura": "AMD64",
+    "version_python": "3.14.3",
+    "version_numpy": "2.5.1",
+    "modelo_procesador": "12th Gen Intel(R) Core(TM) i5-1235U",
+    "nucleos_fisicos": "10",
+    "procesadores_logicos": "12",
+    "ram_total_bytes": 8268959744,
+    "ram_disponible_bytes": 441708544,
+    "gpu": "Intel(R) UHD Graphics",
+    "disco_total_bytes": 510477537280,
+    "disco_libre_bytes": 252191756288
+}
