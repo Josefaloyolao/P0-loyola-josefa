@@ -81,24 +81,38 @@ def main():
         writer.writerow(["metodo", "tamano", "repeticion", "tiempo_segundos"])
         writer.writerows(filas)
 
-    # Gráfico con escala logarítmica: la diferencia entre ambos métodos es
-    # de varios órdenes de magnitud.
-    fig, ax = plt.subplots(figsize=(8, 5))
-    for metodo, color in [("mimatmul", "tab:red"), ("numpy", "tab:blue")]:
+    # Promedio del tiempo por método y tamaño (para un gráfico limpio).
+    promedios = {}
+    for metodo in ["mimatmul", "numpy"]:
         datos = [row for row in filas if row[0] == metodo]
-        x = [row[1] for row in datos]
-        y = [row[3] for row in datos]
-        ax.plot(x, y, marker="o", linestyle="-", label=metodo, color=color)
+        por_tamano = {}
+        for _, n, _, t in datos:
+            por_tamano.setdefault(n, []).append(t)
+        promedios[metodo] = {
+            n: sum(tiempos) / len(tiempos)
+            for n, tiempos in sorted(por_tamano.items())
+        }
 
-    ax.set_yscale("log")
-    ax.set_xlabel("Tamaño de la matriz (n x n)")
-    ax.set_ylabel("Tiempo de ejecución (segundos, escala log)")
-    ax.set_title("Benchmark: mimatmul vs NumPy")
-    ax.legend()
-    ax.grid(True, which="both", alpha=0.3)
+    # Dos paneles: escala logarítmica y escala normal. La escala log permite
+    # ver ambos métodos (difieren ~1000x); la normal muestra el contraste
+    # real de magnitudes.
+    fig, ejes = plt.subplots(1, 2, figsize=(12, 5))
+    for ax, escala in zip(ejes, ["log", "normal"]):
+        for metodo, color in [("mimatmul", "tab:red"), ("numpy", "tab:blue")]:
+            x = list(promedios[metodo].keys())
+            y = list(promedios[metodo].values())
+            ax.plot(x, y, marker="o", linestyle="-", label=metodo, color=color)
+        if escala == "log":
+            ax.set_yscale("log")
+        ax.set_xlabel("Tamaño de la matriz (n x n)")
+        ax.set_ylabel("Tiempo promedio (segundos)")
+        ax.set_title(f"Benchmark: mimatmul vs NumPy ({escala})")
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+
+    fig.tight_layout()
 
     png_path = FIGURES_DIR / "benchmark.png"
-    fig.tight_layout()
     fig.savefig(png_path, dpi=150)
     print(f"\nResultados guardados en: {csv_path}")
     print(f"Gráfico guardado en: {png_path}")
