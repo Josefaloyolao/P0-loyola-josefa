@@ -137,8 +137,6 @@ tres ciclos anidados.
 
 ## Uso de OpenCode
 
-*Sección de reflexión personal. Revisar y ajustar antes de entregar.*
-
 - **¿Qué parte realizó correctamente el agente?** La configuración del
   ambiente (venv, dependencias), la estructura del repositorio, la
   implementación de `mimatmul`, las pruebas, el benchmark con CSV y
@@ -150,9 +148,8 @@ tres ciclos anidados.
   proceso hijo).
 - **¿Qué archivo comprendo mejor?** `src/mimatmul.py`, porque es la
   función más corta y directa del proyecto.
-- **¿Qué parte todavía me resulta menos clara?** La medición fina de
-  tiempos y la escala logarítmica del gráfico, así como las llamadas de
-  bajo nivel (`ctypes`/`wmic`) de `system_info.py`.
+- **¿Qué parte todavía me resulta menos clara?** Las llamadas de bajo
+  nivel (`ctypes`/`wmic`) de `system_info.py`.
 
 ## Estado
 
