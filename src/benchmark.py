@@ -81,7 +81,9 @@ def main():
         writer.writerow(["metodo", "tamano", "repeticion", "tiempo_segundos"])
         writer.writerows(filas)
 
-    # Promedio del tiempo por método y tamaño (para un gráfico limpio).
+    # Gráfico único con escala logarítmica: la diferencia entre ambos
+    # métodos es de varios órdenes de magnitud, así solo se ven las dos
+    # curvas a la vez con escala log. Se grafica el promedio por tamaño.
     promedios = {}
     for metodo in ["mimatmul", "numpy"]:
         datos = [row for row in filas if row[0] == metodo]
@@ -93,22 +95,18 @@ def main():
             for n, tiempos in sorted(por_tamano.items())
         }
 
-    # Dos paneles: escala logarítmica y escala normal. La escala log permite
-    # ver ambos métodos (difieren ~1000x); la normal muestra el contraste
-    # real de magnitudes.
-    fig, ejes = plt.subplots(1, 2, figsize=(12, 5))
-    for ax, escala in zip(ejes, ["log", "normal"]):
-        for metodo, color in [("mimatmul", "tab:red"), ("numpy", "tab:blue")]:
-            x = list(promedios[metodo].keys())
-            y = list(promedios[metodo].values())
-            ax.plot(x, y, marker="o", linestyle="-", label=metodo, color=color)
-        if escala == "log":
-            ax.set_yscale("log")
-        ax.set_xlabel("Tamaño de la matriz (n x n)")
-        ax.set_ylabel("Tiempo promedio (segundos)")
-        ax.set_title(f"Benchmark: mimatmul vs NumPy ({escala})")
-        ax.legend()
-        ax.grid(True, alpha=0.3)
+    fig, ax = plt.subplots(figsize=(8, 5))
+    for metodo, color in [("mimatmul", "tab:red"), ("numpy", "tab:blue")]:
+        x = list(promedios[metodo].keys())
+        y = list(promedios[metodo].values())
+        ax.plot(x, y, marker="o", linestyle="-", label=metodo, color=color)
+
+    ax.set_yscale("log")
+    ax.set_xlabel("Tamaño de la matriz (n x n)")
+    ax.set_ylabel("Tiempo promedio (segundos)")
+    ax.set_title("Benchmark: mimatmul vs NumPy")
+    ax.legend()
+    ax.grid(True, which="both", alpha=0.3)
 
     fig.tight_layout()
 

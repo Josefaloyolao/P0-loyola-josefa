@@ -94,9 +94,8 @@ y 200, con 3 repeticiones por método (5 tamaños × 2 métodos × 3
 repeticiones = 30 mediciones). Se usó `time.perf_counter` y una ejecución
 de calentamiento previa. Los datos están en
 `data/benchmark_results.csv`. El gráfico muestra el promedio por tamaño en
-dos paneles: uno con escala logarítmica (permite ver ambos métodos, que
-difieren ~1000×) y otro con escala normal (muestra el contraste real de
-magnitudes).
+escala logarítmica, necesaria porque los tiempos difieren ~1000× entre
+ambos métodos.
 
 Comportamiento observado: `mimatmul` crece de forma mucho más abrupta que
 NumPy. Por ejemplo, con n=200 `mimatmul` tarda ~1.05 s mientras que NumPy
